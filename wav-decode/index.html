@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <select song>
+      <option value="https://dev.cczu.edu.cn/~ntzyz/audio_context/audio4.wav">FELT - inside (19.1MB)</option>
+      <option value="https://dev.cczu.edu.cn/~ntzyz/audio_context/audio3.wav">人と事象が巡り逢う确率についての朝の考察 (20.4 MB)</option>
+      <option value="https://dev.cczu.edu.cn/~ntzyz/audio_context/audio.wav">DECO*27 - リバーシブル・キャンペーン (29.7 MB)</option>
+      <option value="https://dev.cczu.edu.cn/~ntzyz/audio_context/audio2.wav">Halsey - Castle (46.7 MB)</option>
+    </select>
+    <button start>start</button>
+    <span status>Ready ... </span>
+    <br />
+    <span>Oscilloscope sampling interval:</span>
+    <input interval type="text" value="32" placeholder="sampling interval"/>
+    <button onclick="if (wav) wav.sampleingInterval = document.querySelector('input[interval]').value; ">Update</button>
+    <div frame></div>
+    <canvas width="500" height="300" style="width: 500px; height: 300px; border: 1px solid black">Ahhh please use a better browser.</canvas>
+    <script src="build.js"></script>
+  </body>
+</html>
