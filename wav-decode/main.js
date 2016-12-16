@@ -121,7 +121,7 @@
       this.source.connect(ctx.destination);
       this.source.buffer = this.audioBuffer;
 
-      let last500framse = this.last500framse = new Array(500).fill(0);
+      let last500frames = this.last500frames = new Array(500).fill(0);
       this.sampleingInterval = 16;
     }
 
@@ -137,8 +137,8 @@
           = Number(wav.data[currentFrame]) / (1 << (wav['fmt '].bitsPerSample - 1));
 
         if (currentFrame % (this.sampleingInterval * 2) === 1) {
-          this.last500framse.shift();
-          this.last500framse.push((channelBuffering[1][Math.ceil(currentFrame / 2)] + channelBuffering[0][Math.ceil(currentFrame / 2)]) / 2);
+          this.last500frames.shift();
+          this.last500frames.push((channelBuffering[1][Math.ceil(currentFrame / 2)] + channelBuffering[0][Math.ceil(currentFrame / 2)]) / 2);
         }
 
         if (!this.started) {
@@ -191,7 +191,7 @@
         glCtx.beginPath();
         glCtx.moveTo(0, canvas.height / 2);
         for (let i = 0; i < 500; ++i) {
-          glCtx.lineTo(i * canvas.width / 500, canvas.height / 2 * (wav.last500framse[i] + 1) );
+          glCtx.lineTo(i * canvas.width / 500, canvas.height / 2 * (wav.last500frames[i] + 1) );
         }
         glCtx.stroke();
       }, 10);
