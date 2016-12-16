@@ -152,8 +152,8 @@
   }
 
   function main() {
-    if (navigator.userAgent.indexOf('Chrome') === -1) {
-      alert('Please use Chrome or Chromium instead of .');
+    if (navigator.userAgent.indexOf('Chrome') === -1 || navigator.userAgent.indexOf('Edge') > 0) {
+      alert('Sorry but we only support Chrome/Chromium.');
       return;
     }
     $get(select.value).then((file) => {
