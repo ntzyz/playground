@@ -20,7 +20,7 @@ libssh-dev
 
 #### Build and run
 ```bash
-$ sudo apt install 
+$ sudo apt install libssh-dev
 $ make
 $ ./server
 ```
