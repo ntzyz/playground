@@ -9,7 +9,7 @@
 #include <libssh/libssh.h>
 #include <libssh/server.h>
 
-#define KEYS_FOLDER "/home/ntzyz/Document/ssh-hello/ssh/"
+#define KEYS_FOLDER "/home/ntzyz/Document/playground/simple-sshd/ssh/"
 
 using namespace std;
 
