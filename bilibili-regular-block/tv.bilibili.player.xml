@@ -1,0 +1,68 @@
+<filters>
+  <!-- 呃。。 -->
+  <item enabled="true">t=我是.+?党</item>
+  <!-- 无意义的短数字 -->
+  <item enabled="true">t=^\d{0,2}$</item>
+  <!-- 精污 av 号 -->
+  <item enabled="true">t=[aA][vV](170001|10388|10492)</item>
+  <!--  -->
+  <item enabled="true">t=←↓↗↘</item>
+  <!-- 红红火火恍恍惚惚 -->
+  <item enabled="true">t=[恍惚红火]{2}</item>
+  <!-- 午时已到以及其变种' -->
+  <item enabled="true">t=[无五午5][时十⑩屎01][已以一][到刀]</item>
+  <!--  -->
+  <item enabled="true">t=测试</item>
+  <!-- 第一第二，前十前一百，后一万，etc -->
+  <item enabled="true">t=^[第前后][0-9一二三四五六七八九零十百千]+.{0,6}[！!\?？]*$</item>
+  <!--  -->
+  <item enabled="true">t=厂下广卞</item>
+  <!-- "        注释两倍速        " -->
+  <item enabled="true">t=倍速 *$</item>
+  <!-- 难受，想哭 -->
+  <item enabled="true">t=香菇</item>
+  <!-- 好前！ -->
+  <item enabled="true">t=^[好]{0,}前[!！~]{0,}$</item>
+  <!--  -->
+  <item enabled="true">t=高级弹幕</item>
+  <!-- 部分 emoji -->
+  <item enabled="true">t=([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]</item>
+  <!-- 部分 emoji -->
+  <item enabled="true">t=[\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]</item>
+  <!-- "       高级弹幕" -->
+  <item enabled="true">t=(^ | $)</item>
+  <!-- 新年大吉吧 -->
+  <item enabled="true">t=吉吧</item>
+  <!-- 拜个早年 -->
+  <item enabled="true">t=[拜|过|新|早](.*?)年</item>
+  <!-- 一口气1048576集 -->
+  <item enabled="true">t=一口气(.+?)集</item>
+  <!-- 我跟你讲，你头上都绿了 -->
+  <item enabled="true">t=我老婆</item>
+  <!-- WiFi -->
+  <item enabled="true">t=[Ww][Ii][Ff][Ii]</item>
+  <!-- 啊这个不说了…… -->
+  <item enabled="true">t=电光.+?信仰.+?长存</item>
+  <!-- 去nmd指挥部 -->
+  <item enabled="true">t=(空降|空难|盲降|降落|指挥部|坐标|\d+?[:：]\d+?)</item>
+  <!-- 罗列观点的撕逼…… -->
+  <item enabled="true">t=(\d+?)[.。\ ]</item>
+  <!-- too young -->
+  <item enabled="true">t=膜法</item>
+  <!-- too simple -->
+  <item enabled="true">t=^\+\d*?s$</item>
+  <!-- 日常打卡 -->
+  <item enabled="true">t=^日常</item>
+  <!-- 前方xx福利 -->
+  <item enabled="true">t=^前方(.+?)福利$</item>
+  <!-- 刷日期。。 -->
+  <item enabled="true">t=^\d{2,4}[。\.\/\-\:：]\d{1,2}[。\.\/\-\:：]\d{1,2}</item>
+  <!-- 无脑RE0厨？ -->
+  <item enabled="true">t=[苹水]果摊</item>
+  <!-- 巧了，寡人屏蔽了 -->
+  <item enabled="true">t=巧了[，, ]</item>
+  <!-- 啊啊啊~我的右手！我的王之力！ -->
+  <item enabled="true">t=王之力</item>
+  <!-- http://www.bilibili.com/video/av6930969/ -->
+  <item enabled="true">t=做操</item>
+</filters>
