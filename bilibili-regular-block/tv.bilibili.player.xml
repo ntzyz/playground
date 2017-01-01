@@ -65,4 +65,8 @@
   <item enabled="true">t=王之力</item>
   <!-- http://www.bilibili.com/video/av6930969/ -->
   <item enabled="true">t=做操</item>
+  <!-- 我管你刷了几周目啊…… -->
+  <item enabled="true">t=[一二三四五六七八九十百千万零负0-9a-zA-Z]+?周目</item>
+  <!-- 这个也是烦…… -->
+  <item enabled="true">t=[爱的|供养|再问|自杀]{2,}</item>
 </filters>
