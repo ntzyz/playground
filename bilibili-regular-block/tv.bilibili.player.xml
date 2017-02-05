@@ -30,7 +30,7 @@
   <!-- 部分 emoji -->
   <item enabled="true">t=[\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]</item>
   <!-- "       高级弹幕" -->
-  <item enabled="true">t=(^ | $)</item>
+  <item enabled="true">t=(^ {5,}| {5,}$)</item>
   <!-- 新年大吉吧 -->
   <item enabled="true">t=吉吧</item>
   <!-- 拜个早年 -->
@@ -46,7 +46,7 @@
   <!-- 去nmd指挥部 -->
   <item enabled="true">t=(空降|空难|盲降|降落|指挥部|坐标|\d+?[:：]\d+?)</item>
   <!-- 罗列观点的撕逼…… -->
-  <item enabled="true">t=(\d+?)[.。\ ]</item>
+  <item enabled="true">t=^(\d+?)[.。\ ]</item>
   <!-- too young -->
   <item enabled="true">t=膜法</item>
   <!-- too simple -->
