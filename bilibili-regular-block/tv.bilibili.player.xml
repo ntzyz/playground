@@ -26,7 +26,7 @@
   <!--  -->
   <item enabled="true">t=高级弹幕</item>
   <!-- 部分 emoji -->
-  <item enabled="true">t=([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]</item>
+  <item enabled="true">t=([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])</item>
   <!-- 部分 emoji -->
   <item enabled="true">t=[\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]</item>
   <!-- "       高级弹幕" -->
@@ -68,9 +68,11 @@
   <!-- 我管你刷了几周目啊…… -->
   <item enabled="true">t=[一二三四五六七八九十百千万零负0-9a-zA-Z]+?周目</item>
   <!-- 这个也是烦…… -->
-  <item enabled="true">t=[爱的|供养|再问|自杀]{2,}</item>
+  <item enabled="true">t=(爱的|供养|再问|自杀).+?(爱的|供养|再问|自杀)</item>
   <!-- 我哲♂学入宅 -->
   <item enabled="true">t=.+?入的{0,1}宅</item>
   <!-- 打这么多字不嫌长么…… -->
   <item enabled="true">t=.{32,}</item>
+  <!-- 暴力接龙 -->
+  <item enabled="true">t=^[苟利国家生死以岂因祸福避趋之]$</item>
 </filters>
