@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pcap": "https://github.com/mranney/node_pcap.git"
+  }
+}
