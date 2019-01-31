@@ -11,3 +11,4 @@ Codes for fun.
 1. [bandwidth](bandwidth): Simple bandwidth monitor utility.
 1. [pcap-port-statistics](pcap-port-statistics): Collect all traffic data by port with libpcap.
 1. [flac-player-sdl](flac-player-sdl): Decode and playback flac files with FLAC and SDL. 
+1. [reversi](reversi): Simple(Stupid?) strategy board game called [Reversi](https://en.wikipedia.org/wiki/Reversi), requires at least two players.

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@2.2.0/dist/socket.io.js"></script>
+  <style>
+    body {
+      background: gray;
+    }
+    td {
+      width: 20px;
+      height: 20px;
+      border: 1px solid darkgray;
+      border-radius: 10px;
+    }
+    td.white {
+      background: white;
+    }
+    td.black {
+      background: black;
+    }
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <h2></h2>
+  <table class="board">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    const socket = io(window.location.origin);
+    const boardElement = document.querySelector('.board > tbody');
+    const title = document.querySelector('h1');
+    const status = document.querySelector('h2');
+    let im = '';
+
+    boardElement.onclick = function (e) {
+      socket.emit('op', [
+        Number(e.target.attributes['data-x'].value),
+        Number(e.target.attributes['data-y'].value),
+      ])
+    }
+
+    socket.on('message', message => {
+      title.innerText = 'You are: ' + message;
+      im = message;
+    })
+
+    socket.on('next_player', player => {
+      if (player === im) {
+        status.innerText = 'Now it\'s your turn';
+      } else {
+        status.innerText = 'Waiting...';
+      }
+    })
+    
+    socket.on('board', board => {
+      boardElement.innerHTML = board.map((row, x) => {
+        return '<tr>' + row.map((item, y) => {
+          switch (item) {
+            case 0: return '<td data-x="' + x + '" data-y="' + y + '"></td>';
+            case 1: return '<td data-x="' + x + '" data-y="' + y + '" class="white"></td>';
+            case 2: return '<td data-x="' + x + '" data-y="' + y + '" class="black"></td>';
+          }
+        }).join('') + '</tr>'
+      }).join('')
+    })
+  </script>
+</body>
+</html>
