@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "azure-arm-dns": "^3.2.0",
+    "express": "^4.16.4",
+    "ms-rest-azure": "^2.6.0"
+  }
+}
