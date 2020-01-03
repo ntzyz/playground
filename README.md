@@ -13,3 +13,4 @@ Codes for fun.
 1. [flac-player-sdl](flac-player-sdl): Decode and playback flac files with FLAC and SDL. 
 1. [reversi](reversi): Simple(Stupid?) strategy board game called [Reversi](https://en.wikipedia.org/wiki/Reversi), requires at least two players.
 1. [Azure DDNS](azure-ddns): HTTP Server allowing you to update DNS records on Azure. Use it with `/etc/ppp/ip-up.d/` and `cURL`.
+1. [websocket-terminal-cpp-server](websocket-terminal-cpp-server): WebSocket Terminal written with C++ and Linux API, server only.
