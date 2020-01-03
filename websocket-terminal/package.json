@@ -7,6 +7,6 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
-    "xterm": "^2.9.2"
+    "xterm": "^4.3.0"
   }
 }
