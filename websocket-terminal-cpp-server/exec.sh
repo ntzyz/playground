@@ -1,3 +1,5 @@
 #!/bin/bash
 
-neofetch
+export TERM=xterm-256color
+
+/bin/bash --login

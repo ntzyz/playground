@@ -10,7 +10,7 @@
 <body>
   <div class="terminal" style="width: min-content; font-size: 12px;"></div>
   <script>
-    const socket_url = 'ws://' + location.host + '/';
+    const socket_url = `${location.protocol === 'http:' ? 'ws:' : 'wss:'}//${location.host}${location.pathname}`
     const socket = new WebSocket(socket_url);
 
     socket.onopen =() => {
