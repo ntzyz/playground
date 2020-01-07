@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/xterm@4.2.0/lib/xterm.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.2.0/css/xterm.min.css">
+</head>
+<body>
+  <div class="terminal" style="width: min-content; font-size: 12px;"></div>
+  <script>
+    const socket_url = 'ws://' + location.host + '/';
+    const socket = new WebSocket(socket_url);
+
+    socket.onopen =() => {
+      window.term = new Terminal({
+        cols: 80,
+        rows: 24,
+        fontFamily: 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+      });
+
+      term.onData(data => socket.send(data));
+
+      term.open(document.querySelector('.terminal'));
+
+      socket.onmessage = (message) => {
+        term.write(message.data);
+      }
+    };
+
+  </script>
+</body>
+</html>

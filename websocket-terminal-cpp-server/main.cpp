@@ -12,6 +12,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <functional>
 
 #include <arpa/inet.h>
 #include <errno.h>
@@ -19,11 +21,15 @@
 #include <sys/poll.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/utsname.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "base64.hpp"
 #include "sha1.hpp"
 #include "pty.hpp"
+#include "frontend.h"
 
 inline std::string &string_trim(std::string &s) {
   if (s.empty()) {
@@ -380,6 +386,7 @@ struct http_response_t {
   int status_code;
   std::string status_text;
   std::map<std::string, std::vector<std::string>> headers;
+  std::string body;
 
   http_response_t(const int _in_status_code) : status_code(_in_status_code) {
     http_status_code_to_status_text();
@@ -430,10 +437,20 @@ struct http_response_t {
   }
 
   void append_header_server() {
-    headers["server"] = std::vector<std::string>({"GLaDOS/1.0.0"});
+    static bool uname_loaded = false;
+    static struct utsname uname_data;
+    static char server_name[1024];
+
+    if (!uname_loaded) {
+      uname(&uname_data);
+      sprintf(server_name, "%s/%s", uname_data.sysname, uname_data.release);
+      uname_loaded = true;
+    }
+
+    headers["server"] = std::vector<std::string>({server_name});
   }
 
-  std::string to_response_header_string() {
+  std::string to_response() {
     std::stringstream ss;
     ss << "HTTP/1.1 " << status_code << " " << status_text << "\r\n";
 
@@ -452,6 +469,7 @@ struct http_response_t {
     }
 
     ss << "\r\n";
+    ss << body;
 
     return ss.str();
   }
@@ -464,7 +482,9 @@ struct websocket_context_t {
   uint8_t *received_buffer = nullptr;
   ssize_t received_buffer_capacity = -1;
   ssize_t received_buffer_used = -1;
+  bool enable_builtin_webpages = false;
   pty_t pty;
+  std::function<void(void)> regist_pty_session;
 
   void append_buffer(uint8_t *buffer, ssize_t buffer_size) {
     if (buffer_size <= 0) {
@@ -525,6 +545,12 @@ struct websocket_context_t {
       http_response_t response(is_websocket ? 101 : 200);
 
       if (is_websocket) {
+        if (regist_pty_session) {
+          pty.spawn();
+          regist_pty_session();
+          regist_pty_session = std::function<void(void)>{};
+        }
+
         const auto key = (ws_sec_key_header_it->second)[0];
 
         printf("Sec-WebSocket-Key sent from client is %s\n", key.c_str());
@@ -553,12 +579,23 @@ struct websocket_context_t {
         response.headers["Sec-WebSocket-Accept"] =
             std::vector<std::string>({hash_base64});
       } else {
-        response.headers["content-type"] =
-            std::vector<std::string>({"text/plain; charset=utf-8"});
-        response.headers["content-length"] = std::vector<std::string>({"0"});
+        if (request.request_path == "/" && enable_builtin_webpages) {
+          std::string file_content(frontend_html, frontend_html + frontend_html_len);
+
+          response.headers["content-type"] =
+              std::vector<std::string>({"text/html; charset=utf-8"});
+          response.headers["content-length"] = std::vector<std::string>({std::to_string(file_content.size())});
+          response.body = file_content;
+        } else {
+          response.headers["content-length"] = std::vector<std::string>({"0"});
+          response.headers["content-type"] =
+              std::vector<std::string>({"text/plain; charset=utf-8"});
+          response.status_code = 404;
+          response.status_text = "Not Found";
+        }
       }
 
-      const auto str = response.to_response_header_string();
+      const auto str = response.to_response();
       send(client_fd, str.c_str(), str.size(), 0);
 
       if (is_websocket) {
@@ -662,7 +699,7 @@ struct websocket_context_t {
   }
 };
 
-int create_server(uint16_t port) {
+int create_server(uint16_t port, bool localhost = true) {
   int server_fd = 0;
   struct sockaddr_in server;
 
@@ -673,7 +710,7 @@ int create_server(uint16_t port) {
 
   server.sin_family = AF_INET;
   server.sin_port = htons(port);
-  server.sin_addr.s_addr = htonl(INADDR_ANY);
+  server.sin_addr.s_addr = htonl(localhost ? INADDR_LOOPBACK : INADDR_ANY);
 
   int opt_val = 1;
   setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof opt_val);
@@ -694,11 +731,11 @@ int create_server(uint16_t port) {
     exit(1);
   }
 
-  printf("[INFO] Server startted on port %d\n", port);
+  printf("[INFO] Server startted on %s:%d\n", localhost ? "127.0.0.1" : "0.0.0.0", port);
   return server_fd;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
   const int POOL_TIMEOUT = 10;
   const int MAX_FDS = 512;
   int server_fd;
@@ -706,8 +743,29 @@ int main() {
   struct pollfd fds[MAX_FDS];
   std::map<int, std::shared_ptr<websocket_context_t>> sessions;
   std::map<int, std::shared_ptr<websocket_context_t>> pty_sessions;
+  int bind_port = 2333;
+  int opt;
+  bool enable_builtin_webpages = false;
+  bool allow_remote = false;
 
-  server_fd = create_server(2333);
+  while ((opt = getopt(argc, argv, "p:w::r::")) != -1) {
+    switch (opt) {
+    case 'p':
+      bind_port = atoi(optarg);
+      break;
+    case 'w':
+      enable_builtin_webpages = true;
+      break;
+    case 'r':
+      allow_remote = true;
+      break;
+    default: /* '?' */
+      fprintf(stderr, "Usage: %s [-p port] [-w] [-r]\n", argv[0]);
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  server_fd = create_server(bind_port, !allow_remote);
   nfds = 1;
 
   memset(fds, 0, sizeof(fds));
@@ -759,17 +817,17 @@ int main() {
 
         // add it to sessions
         auto session = std::make_shared<websocket_context_t>();
+        session->enable_builtin_webpages = enable_builtin_webpages;
         session->client_fd = client_fd;
         session->stage = websocket_connection_stage_t::handshaking;
 
         sessions[client_fd] = session;
-
-        if (session->pty.ready) {
+        session->regist_pty_session = [&fds, &nfds, &pty_sessions, session]() {
           fds[nfds].fd = session->pty.master_fd;
           fds[nfds].events = POLLIN;
-          pty_sessions[session->pty.master_fd] = session;
           nfds++;
-        }
+          pty_sessions[session->pty.master_fd] = session;
+        };
 
         printf("new connection accepted, current nfds = %d\n", nfds);
       } else if (sessions.find(fds[i].fd) != sessions.end() && fds[i].revents == POLLIN) {
@@ -802,7 +860,9 @@ int main() {
             sessions.erase(sessions.find(client_fd));
 
             // also erase it from pty sessions
-            pty_sessions.erase(pty_sessions.find(session->pty.master_fd));
+            if (pty_sessions.find(session->pty.master_fd) != pty_sessions.end()) {
+              pty_sessions.erase(pty_sessions.find(session->pty.master_fd));
+            }
 
             for (ssize_t j = 0; j != nfds; j++) {
               if (fds[j].fd == session->pty.master_fd) {

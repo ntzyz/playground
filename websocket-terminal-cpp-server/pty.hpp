@@ -5,5 +5,6 @@ struct pty_t {
   int master_fd;
 
   pty_t();
+  void spawn();
   ~pty_t();
 };

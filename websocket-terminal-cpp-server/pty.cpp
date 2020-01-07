@@ -10,6 +10,9 @@
 #include <termios.h>
 
 pty_t::pty_t () {
+}
+
+void pty_t::spawn() {
   struct winsize winp;
   winp.ws_col = 80;
   winp.ws_row = 24;
@@ -22,14 +25,16 @@ pty_t::pty_t () {
     perror("forkpty");
     return;
   } else if (pid == 0) { // master
+    char path[1024];
     char *params[] = {
-      strdup("/usr/bin/bash"),
-      strdup("--login"),
+      path,
       nullptr
     };
 
-    execvp("/usr/bin/bash", params);
+    getcwd(path, sizeof (path));
+    strcat(path, "/exec.sh");
 
+    execvp(path, params);
     perror("execvp");
   } else {
     int flags = fcntl(master_fd, F_GETFL, 0);

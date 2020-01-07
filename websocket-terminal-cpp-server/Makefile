@@ -3,8 +3,8 @@ CXX=g++
 LD=gcc
 
 TARGET=main
-CFLAGS=-Wall -O0 -ggdb
-LDFLAGS=-fPIC -lpthread -lm -lutil
+CFLAGS=-Wall -O3 -static
+LDFLAGS=-fPIC -lpthread -lm -lutil -static
 OBJS=main.o sha1.o base64.o pty.o
 
 .PHONY: clean
