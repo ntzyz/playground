@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #app {
+      width: 500px;
+      height: 300px;
+      border: 1px solid black;
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      width: 500px;
+    }
+
+    .input-row input {
+      width: 350px;
+      flex-grow: 1;
+    }
+
+    .input-row > *:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    .input-row button {
+      width: 120px;
+      box-sizing: border-box;
+    }
+
+    input[type="button"], button {
+      cursor:pointer; 
+      border: 1px solid #707070;
+      background-color: #F0F0F0;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 2px #fff, inset 0 -0.7em #DDD;
+      padding: 3px 6px;
+    }
+
+    input[type="button"]:hover, button:hover {
+      cursor:pointer;
+      background-color: #EAF6FD;
+      border: 1px solid #3C7FB1;
+      box-shadow: inset 0 1px 2px #fff, inset 0 -0.7em #BEE6FD, 0 0 3px #A7D9F5;
+    }
+
+    html {
+      text-align: center;
+    }
+
+    body {
+      text-align: left;;
+      width: min-content;
+      display: inline-block;
+      margin: 8px auto;
+    }
+  </style>
+</head>
+<body>
+  <div style="margin-bottom: 8px;">程序员小盆友是如何练习识谱的（不</div>
+  <div id="app"></div>
+  <div class="input-row">
+    <input type="text" placeholder="输入唱名（不需要关注八度）">
+    <button>让我康康对不对</button>
+  </div>
+  <pre></pre>
+  <script src="/bundle.js"></script>
+</body>
+</html>
