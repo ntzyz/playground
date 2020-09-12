@@ -107,8 +107,15 @@
     }
 
     prepare() {
-      let ctx = this.ctx = new AudioContext();
-      let framesCount = this.framesCount = wav.ChunkSize / (wav['fmt '].bitsPerSample / 8);
+      let ctx, framesCount;
+
+      try {
+          ctx = this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+          framesCount = this.framesCount = wav.ChunkSize / (wav['fmt '].bitsPerSample / 8);
+      } catch (ex) {
+          alert('browser do not support AudioContext API');
+          return
+      }
 
       let audioBuffer = this.audioBuffer = ctx.createBuffer(
         wav['fmt '].NumOfChan, 
@@ -152,10 +159,6 @@
   }
 
   function main() {
-    if (navigator.userAgent.indexOf('Chrome') === -1 || navigator.userAgent.indexOf('Edge') > 0) {
-      alert('Sorry but we only support Chrome/Chromium.');
-      return;
-    }
     $get(select.value).then((file) => {
       status.innerText = 'Loading media ... ';
       start.style.display = 'none';
